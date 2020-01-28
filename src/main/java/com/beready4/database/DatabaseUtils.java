@@ -1,6 +1,6 @@
 package com.beready4.database;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.beready4.numeric.NumericUtils;
@@ -8,24 +8,17 @@ import com.beready4.numeric.NumericUtils;
 public class DatabaseUtils {
 
 	// in clause parameter padding
-	public static List paddingInClauseParameter(List<String> parameters) {
+	public static List<String> paddingInClauseParameter(List<String> parameters) {
 		if (parameters == null) {
 			return null;
 		}
 
 		// TODO algorithm optimize
 		int paramLen = parameters.size();
-		int adjustedLen = NumericUtils.nextPowOfTwo(paramLen);
-		List<String> padded = new ArrayList<>(adjustedLen);
+		String[] padded = new String[NumericUtils.nextPowOfTwo(paramLen)];
 
-		padded.addAll(parameters);
+		Arrays.fill(parameters.toArray(padded), paramLen, padded.length, parameters.get(paramLen - 1));
 
-		String lastValue = parameters.get(paramLen - 1);
-
-		for (int i = paramLen; i < adjustedLen; i++) {
-			padded.add(lastValue);
-		}
-
-		return padded;
+		return Arrays.asList(padded);
 	}
 }
